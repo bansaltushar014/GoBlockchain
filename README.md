@@ -4,6 +4,6 @@ This is the project containing blockchain basic functionalities. Demonstrates th
 
 ### Steps to Run 
 
-* go run main.go createWallet <NodeID>
-* go run main.go getWallet <address> <NodeID>
-* go run main.go getAllAddress <NodeID>
+* go run main.go createWallet 'NodeID'
+* go run main.go getWallet 'address' 'NodeID'
+* go run main.go getAllAddress 'NodeID'
