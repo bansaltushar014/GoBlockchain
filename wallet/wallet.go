@@ -71,15 +71,16 @@ func NewKeyPair() (ecdsa.PrivateKey, []byte) {
 func (p *Wallets) AddWallet() *Wallets {
 	s := MakeKeys()
 	address := s.Address()
-	fmt.Println("adddddddddress")
-	fmt.Println(string(address))
 	p.Wallets[string(address)] = s
 	fmt.Println(p.Wallets[string(address)].PublicKey)
 	return p
 }
 
-func CreateWallet() *Wallets {
+func CreateWallet(nodeId string) *Wallets {
 	p := Wallets{make(map[string]*Wallet)}
+	// This is needed so that new wallets are added, not overriden
+	err := p.LoadFile(nodeId)
+	Handle(err)
 	return &p
 }
 
@@ -87,6 +88,19 @@ func (p *Wallets) GetWallet(address string) *Wallet {
 	s := p.Wallets[address]
 	fmt.Println(s)
 	return s
+}
+
+func (p *Wallets) GetAllAddresses(nodeId string) []string {
+	err := p.LoadFile(nodeId)
+	if err != nil {
+		fmt.Println("Could not load file", err)
+	}
+	var addresses = []string{}
+	for address := range p.Wallets {
+		addresses = append(addresses, address)
+	}
+
+	return addresses
 }
 
 func (ws *Wallets) LoadFile(nodeId string) error {
@@ -166,4 +180,10 @@ func Base58Decode(input []byte) []byte {
 	}
 
 	return decode
+}
+
+func Handle(err error) {
+	if err != nil {
+		fmt.Println(err)
+	}
 }
