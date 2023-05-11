@@ -14,6 +14,11 @@ type BlockChain struct {
 	Database *badger.DB
 }
 
+type BlockChainIterator struct {
+	CurrentHash []byte
+	Database    *badger.DB
+}
+
 const dbFile = "./tmp/blocks/MANIFEST"
 const dbPath = "./tmp/blocks"
 
@@ -98,4 +103,25 @@ func GenesisBlock() {
 		return err
 	})
 	wallet.Handle(err)
+}
+
+func (b *BlockChainIterator) Iter() []byte {
+	var lastHash []byte
+
+	err := b.Database.Update(func(txn *badger.Txn) error {
+		item, err := txn.Get(b.CurrentHash)
+
+		err = item.Value(func(val []byte) error {
+			lastHash = append([]byte{}, val...)
+			return nil
+		})
+
+		return err
+	})
+
+	wallet.Handle(err)
+
+	s := Deserialize(lastHash)
+
+	return s.PrevHash
 }

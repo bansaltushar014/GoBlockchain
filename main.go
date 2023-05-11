@@ -44,6 +44,16 @@ func AddBlock() {
 	fmt.Println(b)
 }
 
+func iter() {
+	fmt.Println("Iterate through Blockchain!")
+	b := blocks.ContinueBlockChain()
+	iter := &blocks.BlockChainIterator{b.LastHash, b.Database}
+	s := iter.Iter()
+	iter2 := &blocks.BlockChainIterator{s, b.Database}
+	s2 := iter2.Iter()
+	fmt.Println(s2)
+}
+
 func main() {
 
 	switch os.Args[1] {
@@ -57,6 +67,8 @@ func main() {
 		genesisBlock()
 	case "AddBlock":
 		AddBlock()
+	case "iter":
+		iter()
 	default:
 		// cli.printUsage()
 		runtime.Goexit()
