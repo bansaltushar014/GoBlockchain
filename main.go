@@ -5,6 +5,7 @@ import (
 	"os"
 	"runtime"
 
+	"github.com/bansaltushar014/golangBlockchain/blocks"
 	"github.com/bansaltushar014/golangBlockchain/wallet"
 )
 
@@ -30,6 +31,19 @@ func getAllAddress(nodeId string) {
 	fmt.Println(addresses)
 }
 
+func genesisBlock() {
+	fmt.Println("Create the Genesis Block!")
+	blocks.GenesisBlock()
+}
+
+func AddBlock() {
+	fmt.Println("Continue Blockchain!")
+	b := blocks.ContinueBlockChain()
+	b.AddBlock([]byte("Second Block"))
+
+	fmt.Println(b)
+}
+
 func main() {
 
 	switch os.Args[1] {
@@ -39,6 +53,10 @@ func main() {
 		getWallet(os.Args[2], os.Args[3])
 	case "getAllAddress":
 		getAllAddress(os.Args[2])
+	case "genesisBlock":
+		genesisBlock()
+	case "AddBlock":
+		AddBlock()
 	default:
 		// cli.printUsage()
 		runtime.Goexit()
